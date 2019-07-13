@@ -48,16 +48,5 @@ namespace VisjectPlugin.Source.Editor
             ExpressionGraph = null;
             base.OnDestroy();
         }
-
-        /*
-         * TODO:
-         *  /// <inheritdoc />
-        protected override void OnParamEditUndo(EditParamAction action, object value)
-        {
-            base.OnParamEditUndo(action, value);
-
-            // Update the asset value to have nice live preview
-            Asset.Parameters[action.Index].Value = value;
-        }*/
     }
 }

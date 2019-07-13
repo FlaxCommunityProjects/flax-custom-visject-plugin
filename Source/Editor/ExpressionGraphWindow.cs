@@ -357,10 +357,20 @@ namespace VisjectPlugin.Source.Editor
         /// <inheritdoc />
         protected override bool SaveSurface()
         {
+            // TODO: Document that I'm compiling it here!
             _surface.CompileSurface(_assetInstance);
             _surface.Save();
-            // TODO: Graph compilation (or maybe it should be in SurfaceData.set?)
             return false;
+        }
+
+        /// <inheritdoc />
+        protected override void OnParamEditUndo(EditParamAction action, object value)
+        {
+            base.OnParamEditUndo(action, value);
+
+            // TODO: Update the asset value to have nice live preview
+            //_assetInstance.Parameters ...uh, they don't have an index...
+            //Asset.Parameters[action.Index].Value = value;
         }
     }
 }
