@@ -52,6 +52,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Source\ExpressionGraph.cs" />
     <Compile Include="Cache\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

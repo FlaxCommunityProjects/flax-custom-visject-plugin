@@ -1,0 +1,92 @@
+{
+	"ID": "fd6cdfa54190e6441453f18488b21725",
+	"TypeName": "VisjectPlugin.Source.ExpressionGraph",
+	"EngineBuild": 6181,
+	"Data": {
+		"_nodes": [
+			{
+				"$type": "VisjectPlugin.Source.ExpressionGraph+GraphParameter, Assembly",
+				"Name": "New parameter",
+				"GroupId": 6,
+				"TypeId": 1,
+				"MethodId": 0,
+				"Values": [
+					-1.0
+				],
+				"InputValues": [],
+				"InputIndices": [],
+				"OutputIndices": [
+					0
+				],
+				"Value": -1.0
+			},
+			{
+				"GroupId": 1,
+				"TypeId": 2,
+				"MethodId": 0,
+				"Values": [],
+				"InputValues": [],
+				"InputIndices": [],
+				"OutputIndices": [
+					1
+				]
+			},
+			{
+				"GroupId": 3,
+				"TypeId": 3,
+				"MethodId": 0,
+				"Values": [
+					1.0,
+					2.0
+				],
+				"InputValues": [
+					1.0,
+					2.0
+				],
+				"InputIndices": [
+					1,
+					-1
+				],
+				"OutputIndices": [
+					1
+				]
+			},
+			{
+				"GroupId": 3,
+				"TypeId": 1,
+				"MethodId": 0,
+				"Values": [
+					0.0,
+					0.0
+				],
+				"InputValues": [
+					0.0,
+					0.0
+				],
+				"InputIndices": [
+					1,
+					0
+				],
+				"OutputIndices": [
+					0
+				]
+			},
+			{
+				"$type": "VisjectPlugin.Source.ExpressionGraph+OutputNode, Assembly",
+				"GroupId": 1,
+				"TypeId": 1,
+				"MethodId": 0,
+				"Values": [],
+				"InputValues": [
+					null
+				],
+				"InputIndices": [
+					0
+				],
+				"OutputIndices": []
+			}
+		],
+		"_variablesLength": 2,
+		"VisjectSurface": "VkcJdeYXAAAAAAAAAAAAAAUAAAABAAAAAQAAAAEAAQACAAAAAgABAAMAAAADAAMABAAAAAEAAwAFAAAAAQAGAALrLW9XQagQRoob6t93LCjhDQAAAC8ABAAWAEEAEQAAABMAAAAMAAQAFQAEABMAAQABAQAAAAACAACAvwAAAAAAAAAAAQAACAAAAAEABAAAAAIBAAAACwAAAAAAAAAAAAAADAAAAAAQi0MBABZBAAAAAAAAAAABAAAIAAAAAQADAAAAAAEAAAALAAAAAAAAAAAAAAAMAAAA/1+Bw//fn8IAAAAAAgAAAAIAAIA/AgAAAEADAAD+LwAAAQACAAAAAAH+LwAAAAAC/i8AAAEABAAAAAABAAAACwAAAAAAAAAAAAAADAAAAP6/isIEAD3BAAAAAAIAAAACAAAAAAIAAAAAAwAA/i8AAAEAAwAAAAIB/i8AAAEABQAAAAAC/i8AAAEAAQAAAAABAAAACwAAAAAAAAAAAAAADAAAAP4/oUL+P39CAAAAAAEAAAAH6y1vV0GoEEaKG+rfdywo4QEAAAgAAAABAAQAAAABAQAAAAsAAAAAAAAAAAAAAAwAAAAAIB7D/w8gQwAAAAABAAAACgAAAAAAAAAAAAAADAAAACPpi0JWNSVDysxMPwk="
+	}
+}

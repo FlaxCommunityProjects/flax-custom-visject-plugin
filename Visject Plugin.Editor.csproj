@@ -59,6 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cache\AssemblyInfo.cs" />
+    <Compile Include="Source\Editor\ExpressionGraphPlugin.cs" />
+    <Compile Include="Source\Editor\ExpressionGraphPreview.cs" />
+    <Compile Include="Source\Editor\ExpressionGraphProxy.cs" />
+    <Compile Include="Source\Editor\ExpressionGraphSurface.cs" />
+    <Compile Include="Source\Editor\ExpressionGraphVariables.cs" />
+    <Compile Include="Source\Editor\ExpressionGraphWindow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
