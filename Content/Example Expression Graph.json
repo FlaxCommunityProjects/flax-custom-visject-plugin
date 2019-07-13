@@ -1,24 +1,40 @@
 {
-	"ID": "fd6cdfa54190e6441453f18488b21725",
+	"ID": "23688e444ab9d98df480ffad55b17d1f",
 	"TypeName": "VisjectPlugin.Source.ExpressionGraph",
 	"EngineBuild": 6181,
 	"Data": {
 		"_nodes": [
 			{
-				"$type": "VisjectPlugin.Source.ExpressionGraph+GraphParameter, Assembly",
-				"Name": "New parameter",
+				"$type": "VisjectPlugin.Source.GraphNodes.GraphParameter, Assembly",
+				"Name": "A",
 				"GroupId": 6,
 				"TypeId": 1,
 				"MethodId": 0,
 				"Values": [
-					-1.0
+					7.0
 				],
 				"InputValues": [],
 				"InputIndices": [],
 				"OutputIndices": [
 					0
 				],
-				"Value": -1.0
+				"Value": 7.0
+			},
+			{
+				"$type": "VisjectPlugin.Source.GraphNodes.GraphParameter, Assembly",
+				"Name": "B",
+				"GroupId": 6,
+				"TypeId": 1,
+				"MethodId": 0,
+				"Values": [
+					0.5
+				],
+				"InputValues": [],
+				"InputIndices": [],
+				"OutputIndices": [
+					1
+				],
+				"Value": 0.5
 			},
 			{
 				"GroupId": 1,
@@ -28,7 +44,22 @@
 				"InputValues": [],
 				"InputIndices": [],
 				"OutputIndices": [
-					1
+					2
+				]
+			},
+			{
+				"GroupId": 3,
+				"TypeId": 15,
+				"MethodId": 0,
+				"Values": [],
+				"InputValues": [
+					null
+				],
+				"InputIndices": [
+					2
+				],
+				"OutputIndices": [
+					2
 				]
 			},
 			{
@@ -37,15 +68,15 @@
 				"MethodId": 0,
 				"Values": [
 					1.0,
-					2.0
+					1.0
 				],
 				"InputValues": [
 					1.0,
-					2.0
+					1.0
 				],
 				"InputIndices": [
-					1,
-					-1
+					2,
+					1
 				],
 				"OutputIndices": [
 					1
@@ -72,7 +103,7 @@
 				]
 			},
 			{
-				"$type": "VisjectPlugin.Source.ExpressionGraph+OutputNode, Assembly",
+				"$type": "VisjectPlugin.Source.GraphNodes.GraphOutput, Assembly",
 				"GroupId": 1,
 				"TypeId": 1,
 				"MethodId": 0,
@@ -86,7 +117,7 @@
 				"OutputIndices": []
 			}
 		],
-		"_variablesLength": 2,
-		"VisjectSurface": "VkcJdeYXAAAAAAAAAAAAAAUAAAABAAAAAQAAAAEAAQACAAAAAgABAAMAAAADAAMABAAAAAEAAwAFAAAAAQAGAALrLW9XQagQRoob6t93LCjhDQAAAC8ABAAWAEEAEQAAABMAAAAMAAQAFQAEABMAAQABAQAAAAACAACAvwAAAAAAAAAAAQAACAAAAAEABAAAAAIBAAAACwAAAAAAAAAAAAAADAAAAAAQi0MBABZBAAAAAAAAAAABAAAIAAAAAQADAAAAAAEAAAALAAAAAAAAAAAAAAAMAAAA/1+Bw//fn8IAAAAAAgAAAAIAAIA/AgAAAEADAAD+LwAAAQACAAAAAAH+LwAAAAAC/i8AAAEABAAAAAABAAAACwAAAAAAAAAAAAAADAAAAP6/isIEAD3BAAAAAAIAAAACAAAAAAIAAAAAAwAA/i8AAAEAAwAAAAIB/i8AAAEABQAAAAAC/i8AAAEAAQAAAAABAAAACwAAAAAAAAAAAAAADAAAAP4/oUL+P39CAAAAAAEAAAAH6y1vV0GoEEaKG+rfdywo4QEAAAgAAAABAAQAAAABAQAAAAsAAAAAAAAAAAAAAAwAAAAAIB7D/w8gQwAAAAABAAAACgAAAAAAAAAAAAAADAAAACPpi0JWNSVDysxMPwk="
+		"_variablesLength": 3,
+		"VisjectSurface": "VkcJdeYXAAAAAAAAAAAAAAcAAAACAAAAAQAAAAEAAQACAAAAAgABAAMAAAAPAAMABAAAAAEABgAFAAAAAwADAAYAAAABAAYABwAAAAEAAwACYYP6x9nK902IYrXYI5VvyQEAAAAgAAEAAQEAAAAAAgAA4EAAAAAAAtfxYiGe1MxLvLIOhEwkhgwBAAAAIwABAAEBAAAAAAIAAAA/AAAAAAAAAAABAAAIAAAAAQAHAAAAAgEAAAALAAAAAAAAAAAAAAAMAAAA5E0lRGyEJUEAAAAAAAAAAAEAAAgAAAABAAMAAAAAAQAAAAsAAAAAAAAAAAAAAAwAAAD1NE7D9jRiwgAAAAAAAAAAAgAA/i8AAAEAAgAAAAAB/i8AAAEABQAAAAABAAAACwAAAAAAAAAAAAAADAAAAI57GkGjEbZBAAAAAAEAAAAH1/FiIZ7UzEu8sg6ETCSGDAEAAAgAAAABAAUAAAABAQAAAAsAAAAAAAAAAAAAAAwAAAA0wqLC7WkYQwAAAAACAAAAAgAAgD8CAACAPwMAAP4vAAABAAMAAAABAf4vAAABAAQAAAAAAv4vAAABAAcAAAAAAQAAAAsAAAAAAAAAAAAAAAwAAAC3pz1Dt6fRQgAAAAABAAAAB2GD+sfZyvdNiGK12COVb8kBAAAIAAAAAQAHAAAAAQEAAAALAAAAAAAAAAAAAAAMAAAAokE9Q73We0MAAAAAAgAAAAIAAAAAAgAAAAADAAD+LwAAAQAFAAAAAgH+LwAAAQAGAAAAAAL+LwAAAQABAAAAAAEAAAALAAAAAAAAAAAAAAAMAAAA/83hQ5CpFkMAAAAAAQAAAAoAAAAAAAAAAAAAAAwAAAAc7L1D6QMtQ5qZWT8J"
 	}
 }

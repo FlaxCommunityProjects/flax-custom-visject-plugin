@@ -4,6 +4,7 @@ using System.Linq;
 using FlaxEditor;
 using FlaxEngine;
 using FlaxEngine.Utilities;
+using VisjectPlugin.Source.GraphNodes;
 
 namespace VisjectPlugin.Source
 {
@@ -14,13 +15,9 @@ namespace VisjectPlugin.Source
         /// </summary>
         public byte[] VisjectSurface { get; set; }
 
-        // TODO: Stuff that you can execute in a built game
-
-        public delegate void ExecuteAction(GraphNode node);
-
         public static readonly ExecuteAction[][][] Actions;
 
-        private static Random _rng = new Random();
+        private static readonly Random _rng = new Random();
 
         static ExpressionGraph()
         {
@@ -68,7 +65,7 @@ namespace VisjectPlugin.Source
                 return groupActions;
             }
             // Main node
-            AddAction(1, 1, 0, (node) => { });
+            AddAction(1, 1, 0, (_) => { });
             // Random float
             AddAction(1, 2, 0, (node) => { node.Return<float>(0, _rng.NextFloat()); });
 
@@ -105,123 +102,10 @@ namespace VisjectPlugin.Source
             AddAction(3, 23, 0, (node) => { node.Return<float>(0, Mathf.Pow(node.InputAs<float>(0), node.InputAs<float>(1))); });
 
             // Parameter
+            // TODO: Set node type?
             AddAction(6, 1, 0, (node) => { node.Return<object>(0, node.Values[0]); });
 
             Actions = ActionsToArray();
-        }
-        public class GraphNode
-        {
-            public int GroupId;
-            public int TypeId;
-            public int MethodId;
-
-            /// <summary>
-            /// Internal node values
-            /// </summary>
-            public object[] Values;
-
-            /// <summary>
-            /// Input values from input boxes
-            /// </summary>
-            public object[] InputValues;
-            public int[] InputIndices;
-            public int[] OutputIndices;
-
-            private IList<object> _variables;
-
-            public GraphNode(int groupId, int typeId, int methodId, object[] values, object[] inputValues, int[] inputIndices, int[] outputIndices)
-            {
-                GroupId = groupId;
-                TypeId = typeId;
-                MethodId = methodId;
-
-                Values = values ?? throw new ArgumentNullException(nameof(values));
-                InputValues = inputValues ?? throw new ArgumentNullException(nameof(inputValues));
-                InputIndices = inputIndices ?? throw new ArgumentNullException(nameof(inputIndices));
-                OutputIndices = outputIndices ?? throw new ArgumentNullException(nameof(outputIndices));
-            }
-
-            public void Execute(IList<object> variables)
-            {
-                _variables = variables;
-                UpdateInputValues(variables);
-                Actions[GroupId][TypeId][MethodId].Invoke(this);
-            }
-
-            public void UpdateInputValues(IList<object> variables)
-            {
-                for (int i = 0; i < InputIndices.Length; i++)
-                {
-                    if (InputIndices[i] != -1)
-                    {
-                        InputValues[i] = variables[InputIndices[i]];
-                    }
-                }
-            }
-
-            protected T CastTo<T>(object value)
-            {
-                if (value == null)
-                {
-                    return default(T);
-                }
-                else if (typeof(T) == typeof(float))
-                {
-                    // Special handling for numbers
-                    // TODO: Replace this with something more efficient and/or better
-                    return (T)Convert.ChangeType(value, typeof(T));
-                }
-                else if (value is T castedValue)
-                {
-                    return castedValue;
-
-                }
-                else
-                {
-                    return default(T);
-                }
-            }
-
-            public T InputAs<T>(int index)
-            {
-                return CastTo<T>(InputValues[index]);
-            }
-
-            public T ValueAs<T>(int index)
-            {
-                return CastTo<T>(Values[index]);
-            }
-
-            public void Return<T>(int index, T returnValue)
-            {
-                _variables[OutputIndices[index]] = returnValue;
-            }
-        }
-
-        public class GraphParameter : GraphNode
-        {
-            public string Name;
-
-            public GraphParameter(int groupId, int typeId, int methodId, string name, object value, int[] outputIndices)
-                : base(groupId, typeId, methodId, new object[1] { value }, new object[0], new int[0], outputIndices)
-            {
-                Name = name;
-                Value = value;
-            }
-
-            public object Value
-            {
-                get => Values[0];
-                set => Values[0] = Value;
-            }
-        }
-
-        public class OutputNode : GraphNode
-        {
-            public OutputNode(int groupId, int typeId, int methodId, object[] values, object[] inputValues, int[] inputIndices, int[] outputIndices)
-                : base(groupId, typeId, methodId, values, inputValues, inputIndices, outputIndices)
-            {
-            }
         }
 
         private float _accumulatedTime = 0;
@@ -242,7 +126,7 @@ namespace VisjectPlugin.Source
 
             for (int i = 0; i < Nodes.Length; i++)
             {
-                Nodes[i].Execute(variables);
+                Nodes[i].Execute(variables, Actions);
             }
 
             // Set the outputs
@@ -250,7 +134,7 @@ namespace VisjectPlugin.Source
         }
 
         private GraphParameter[] _parameters;
-        private OutputNode _output;
+        private GraphOutput _output;
 
         [Serialize]
         private GraphNode[] _nodes;
@@ -279,9 +163,9 @@ namespace VisjectPlugin.Source
         }
 
         [NoSerialize]
-        public OutputNode Output
+        public GraphOutput Output
         {
-            get { return _output ?? (_output = _nodes.OfType<OutputNode>().First()); }
+            get { return _output ?? (_output = _nodes.OfType<GraphOutput>().First()); }
         }
 
         public float OutputFloat { get; private set; }

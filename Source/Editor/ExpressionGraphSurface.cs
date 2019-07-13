@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FlaxEditor.Surface;
 using FlaxEditor.Surface.Elements;
 using FlaxEngine;
+using VisjectPlugin.Source.GraphNodes;
 
 namespace VisjectPlugin.Source.Editor
 {
@@ -88,9 +89,9 @@ namespace VisjectPlugin.Source.Editor
             var variableIndexGetter = new ExpressionGraphVariables();
 
             graph.Nodes = FindNode(MainNodeGroupId, MainNodeTypeId).DepthFirstTraversal()
-                .Select<SurfaceNode, ExpressionGraph.GraphNode>(node =>
+                .Select<SurfaceNode, GraphNode>(node =>
                 {
-                    ExpressionGraph.GraphNode graphNode;
+                    GraphNode graphNode;
                     // Internal node values
                     object[] nodeValues = (node.Values ?? new object[0]).ToArray();
 
@@ -114,15 +115,7 @@ namespace VisjectPlugin.Source.Editor
 
                                                 // Input box has a value
                                                 int valueIndex = inputBox.Archetype.ValueIndex;
-                                                if (valueIndex != -1)
-                                                {
-                                                    return nodeValues[valueIndex];
-                                                }
-                                                else
-                                                {
-                                                    // Never mind, return null
-                                                    return null;
-                                                }
+                                                return (valueIndex != -1) ? nodeValues[valueIndex] : null;
                                             })
                                             .ToArray();
 
@@ -134,18 +127,18 @@ namespace VisjectPlugin.Source.Editor
                     // Main node
                     if (node.GroupArchetype.GroupID == MainNodeGroupId && node.Archetype.TypeID == MainNodeTypeId)
                     {
-                        graphNode = new ExpressionGraph.OutputNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
+                        graphNode = new GraphOutput(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
                     }
                     else if (node.GroupArchetype.GroupID == paramNodeGroupId)
                     {
                         // Parameter node
                         var parameter = GetParameter((Guid)node.Values[0]);
-                        graphNode = new ExpressionGraph.GraphParameter(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, parameter.Name, parameter.Value, outputIndices);
+                        graphNode = new GraphParameter(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, parameter.Name, parameter.Value, outputIndices);
                     }
                     else
                     {
                         // Generic node
-                        graphNode = new ExpressionGraph.GraphNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
+                        graphNode = new GraphNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
                     }
 
                     return graphNode;

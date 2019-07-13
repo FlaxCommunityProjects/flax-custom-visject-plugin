@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.757
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visject Plugin", "Visject Plugin.csproj", "{3C97D434-E00C-49D2-AE6E-F6FC095E27D6}"
 EndProject
@@ -25,7 +25,5 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B17B8D1B-EFD1-4F9D-8B02-D3779609A2BF}
-	EndGlobalSection
 EndGlobal
+
