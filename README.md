@@ -702,13 +702,71 @@ A simple approach for doing so is to go over the surface in a *depth first* mann
 
 ### Compiling the Surface Nodes
 
+`<Surface nodes compilation>`
+
+```csharp
+ /// <inheritdoc />
+ protected override bool SaveSurface()
+ {
+     // Compile the surface
+     _surface.CompileSurface(_assetInstance); 
+     // Save it
+     _surface.Save();
+     return false;
+ }
+```
+
 
 
 ### Executing
 
-
+`<Executing it>`
 
 ### Preview
+
+A simple text only preview
+
+```csharp
+public class ExpressionGraphPreview : AssetPreview
+{
+    public ExpressionGraphPreview(bool useWidgets) : base(useWidgets)
+    {
+    }
+
+    public ExpressionGraph ExpressionGraph { get; set; }
+
+    public override void Update(float deltaTime)
+    {
+        base.Update(deltaTime);
+
+        // Manually update simulation
+        ExpressionGraph?.Update(deltaTime);
+    }
+
+    /// <inheritdoc />
+    public override void Draw()
+    {
+        base.Draw();
+
+        if (ExpressionGraph == null) return;
+
+        Render2D.DrawText(
+            Style.Current.FontLarge,
+            $"Float: {ExpressionGraph.OutputFloat}\n",
+            new Rectangle(Vector2.Zero, Size),
+            Color.Wheat,
+            TextAlignment.Near,
+            TextAlignment.Far);
+    }
+
+    /// <inheritdoc />
+    public override void OnDestroy()
+    {
+        ExpressionGraph = null;
+        base.OnDestroy();
+    }
+}
+```
 
 
 
@@ -731,7 +789,7 @@ Waiting for this...
 
 ## Custom Material Surface
 
-TODO: How to inject nodes by replacing them with custom code nodez
+TODO: How to inject nodes by replacing them with custom code nodez?
 
 
 

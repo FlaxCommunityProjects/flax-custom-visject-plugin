@@ -357,7 +357,6 @@ namespace VisjectPlugin.Source.Editor
         /// <inheritdoc />
         protected override bool SaveSurface()
         {
-            // TODO: Document that I'm compiling it here!
             _surface.CompileSurface(_assetInstance);
             _surface.Save();
             return false;
@@ -368,9 +367,9 @@ namespace VisjectPlugin.Source.Editor
         {
             base.OnParamEditUndo(action, value);
 
-            // TODO: Update the asset value to have nice live preview
-            //_assetInstance.Parameters ...uh, they don't have an index...
-            //Asset.Parameters[action.Index].Value = value;
+            // TODO: Document this
+            // Update the asset value to have nice live preview
+            _assetInstance.Parameters.First(p => p.Index == action.Index).Value = value;
         }
     }
 }

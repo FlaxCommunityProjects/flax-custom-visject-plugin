@@ -12,18 +12,20 @@ namespace VisjectPlugin.Source.GraphNodes
     public class GraphParameter : GraphNode
     {
         public string Name;
+        public int Index;
 
-        public GraphParameter(int groupId, int typeId, int methodId, string name, object value, int[] outputIndices)
+        public GraphParameter(int groupId, int typeId, int methodId, string name, int index, object value, int[] outputIndices)
             : base(groupId, typeId, methodId, new object[1] { value }, new object[0], new int[0], outputIndices)
         {
             Name = name;
+            Index = index;
             Value = value;
         }
 
         public object Value
         {
             get => Values[0];
-            set => Values[0] = Value;
+            set => Values[0] = value;
         }
     }
 

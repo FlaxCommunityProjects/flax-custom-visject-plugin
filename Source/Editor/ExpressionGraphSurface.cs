@@ -133,7 +133,8 @@ namespace VisjectPlugin.Source.Editor
                     {
                         // Parameter node
                         var parameter = GetParameter((Guid)node.Values[0]);
-                        graphNode = new GraphParameter(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, parameter.Name, parameter.Value, outputIndices);
+                        int parameterIndex = Parameters.IndexOf(parameter);
+                        graphNode = new GraphParameter(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, parameter.Name, parameterIndex, parameter.Value, outputIndices);
                     }
                     else
                     {
