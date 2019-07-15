@@ -488,6 +488,15 @@ public class ExpressionGraphWindow : VisjectSurfaceWindow<JsonAsset, ExpressionG
         // TODO: Graph compilation (or maybe it should be in SurfaceData.set?)
         return false;
     }
+    
+    /// <inheritdoc />
+    protected override void OnParamEditUndo(EditParamAction action, object value)
+    {
+        base.OnParamEditUndo(action, value);
+
+        // TODO: Update the asset value to have nice live preview
+        // _assetInstance.Parameters[action.Index].Value = value;
+    }
 }
 ```
 
@@ -700,9 +709,40 @@ To run the Visject surface in a built game, you need to create a runtime represe
 
 A simple approach for doing so is to go over the surface in a *depth first* manner. This makes it easy to execute the nodes in a correct order, where every node gets executed *after* the nodes before it have finished. It also conveniently detects cycles in the graph.
 
-### Compiling the Surface Nodes
+### Compiling the Surface Nodes - Background Information
 
-`<Surface nodes compilation>`
+The runtime version of the graph consists of the following:
+
+- Input parameters
+
+- A part that can be executed
+
+- An output
+
+  
+
+The input parameters are stored in a `Parameters` list. The most important things of a parameter are its name,  value and guid. 
+
+Also important is the index of the parameter in the list. This index is used for the live-updating the preview when undoing and redoing actions. The code for that has to be implemented in `OnParamEditUndo` in the file `ExpressionGraphWindow.cs`.
+
+
+
+`<Nodes, boxes, mapping>`
+
+
+
+TODO: Links to [Group Archetypes](https://github.com/FlaxEngine/FlaxAPI/blob/master/FlaxEditor/Surface/NodeFactory.cs) , [Archetypes](https://github.com/FlaxEngine/FlaxAPI/tree/master/FlaxEditor/Surface/Archetypes)
+
+For the surface compilation, add a method to the `ExpressionGraph`. 
+
+```csharp
+public void CompileSurface(ExpressionGraph graph)
+{
+	// Code
+}
+```
+
+Then, to automatically compile the surface node, modify the `SaveSurface` method in `ExpressionGraphWindow.cs` to include a call to the surface compilation method.
 
 ```csharp
  /// <inheritdoc />
@@ -717,6 +757,12 @@ A simple approach for doing so is to go over the surface in a *depth first* mann
 ```
 
 
+
+### Compiling the Surface Nodes - Interpreter Approach
+
+The following part will go through a simple interpreter approach. For every node in the Visject surface, a runtime version is created. Then, at runtime, those nodes get executed. Internally, the runtime version also has a variables collection, where the inputs and outputs of the nodes get stored.
+
+`<Surface nodes compilation>`
 
 ### Executing
 
@@ -773,6 +819,10 @@ public class ExpressionGraphPreview : AssetPreview
 `<Screenshot>`
 
 ## Going Further
+
+A simple idea for going further is to evaluate the same graph multiple times. For example, the material graph is evaluated for every single pixel on the screen. 
+
+
 
 Graphing (executing the same thing, but with different coordinates)
 
