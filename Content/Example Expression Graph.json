@@ -1,42 +1,53 @@
 {
-	"ID": "5b098c8a48bd2fc75db87aa3734063aa",
+	"ID": "b3f9bf944d525962dbf423bcaf81f3f6",
 	"TypeName": "VisjectPlugin.Source.ExpressionGraph",
 	"EngineBuild": 6181,
 	"Data": {
 		"_nodes": [
 			{
-				"$type": "VisjectPlugin.Source.GraphNodes.GraphParameter, Assembly",
-				"Name": "B",
-				"Index": 0,
 				"GroupId": 6,
 				"TypeId": 1,
 				"MethodId": 0,
-				"Values": [
-					7.0
+				"Values": [],
+				"InputValues": [
+					null
 				],
-				"InputValues": [],
-				"InputIndices": [],
-				"OutputIndices": [
+				"InputIndices": [
 					0
 				],
-				"Value": 7.0
+				"OutputIndices": [
+					2
+				]
 			},
 			{
-				"$type": "VisjectPlugin.Source.GraphNodes.GraphParameter, Assembly",
-				"Name": "A",
-				"Index": 1,
 				"GroupId": 6,
 				"TypeId": 1,
 				"MethodId": 0,
-				"Values": [
-					0.5
+				"Values": [],
+				"InputValues": [
+					null
 				],
-				"InputValues": [],
-				"InputIndices": [],
+				"InputIndices": [
+					0
+				],
 				"OutputIndices": [
+					3
+				]
+			},
+			{
+				"GroupId": 6,
+				"TypeId": 1,
+				"MethodId": 0,
+				"Values": [],
+				"InputValues": [
+					null
+				],
+				"InputIndices": [
 					1
 				],
-				"Value": 0.5
+				"OutputIndices": [
+					4
+				]
 			},
 			{
 				"GroupId": 1,
@@ -46,7 +57,7 @@
 				"InputValues": [],
 				"InputIndices": [],
 				"OutputIndices": [
-					2
+					5
 				]
 			},
 			{
@@ -62,11 +73,11 @@
 					1.0
 				],
 				"InputIndices": [
-					2,
-					1
+					5,
+					4
 				],
 				"OutputIndices": [
-					1
+					4
 				]
 			},
 			{
@@ -82,15 +93,35 @@
 					0.0
 				],
 				"InputIndices": [
-					1,
-					0
+					4,
+					3
 				],
 				"OutputIndices": [
-					0
+					3
 				]
 			},
 			{
-				"$type": "VisjectPlugin.Source.GraphNodes.GraphOutput, Assembly",
+				"GroupId": 3,
+				"TypeId": 1,
+				"MethodId": 0,
+				"Values": [
+					0.0,
+					0.0
+				],
+				"InputValues": [
+					0.0,
+					0.0
+				],
+				"InputIndices": [
+					3,
+					2
+				],
+				"OutputIndices": [
+					2
+				]
+			},
+			{
+				"$type": "VisjectPlugin.Source.VisjectGraphs.GraphOutput, Assembly",
 				"GroupId": 1,
 				"TypeId": 1,
 				"MethodId": 0,
@@ -99,12 +130,26 @@
 					null
 				],
 				"InputIndices": [
-					0
+					2
 				],
 				"OutputIndices": []
 			}
 		],
-		"_variablesLength": 3,
-		"VisjectSurface": "VkcJdeYXAAAAAAAAAAAAAAYAAAACAAAAAQAAAAEAAQACAAAAAgABAAMAAAADAAMABAAAAAEABgAFAAAAAQADAAYAAAABAAYAAjLLgSXRvOdOkFMqZDfu7HQBAAAAIwABAAEBAAAAAAIAAOBAAAAAAAJ/iZzpjKuzS7t1oGWVGfXxAQAAACAAAQABAQAAAAACAAAAPwAAAAAAAAAAAQAACAAAAAEABQAAAAIBAAAACwAAAAAAAAAAAAAADAAAAJAk2UJt2zbAAAAAAAAAAAABAAAIAAAAAQADAAAAAAEAAAALAAAAAAAAAAAAAAAMAAAAGIYGxKuqksIAAAAAAgAAAAIAAIA/AgAAgD8DAAD+LwAAAQACAAAAAAH+LwAAAQAEAAAAAAL+LwAAAQAFAAAAAAEAAAALAAAAAAAAAAAAAAAMAAAAkySTw1oYxkAAAAAAAQAAAAd/iZzpjKuzS7t1oGWVGfXxAQAACAAAAAEAAwAAAAEBAAAACwAAAAAAAAAAAAAADAAAALdtA8TCMLBCAAAAAAIAAAACAAAAAAIAAAAAAwAA/i8AAAEAAwAAAAIB/i8AAAEABgAAAAAC/i8AAAEAAQAAAAABAAAACwAAAAAAAAAAAAAADAAAAFCS5MKIYaxCAAAAAAEAAAAHMsuBJdG8506QUypkN+7sdAEAAAgAAAABAAUAAAABAQAAAAsAAAAAAAAAAAAAAAwAAAAYhqnDYxgoQwAAAAABAAAACgAAAAAAAAAAAAAADAAAAOSdUMMbx7FCZ2aGPwk="
+		"_variablesLength": 6,
+		"VisjectSurface": "VkcJdeYXAAAAAAAAAAAAAAgAAAACAAAAAQAAAAEAAQACAAAAAgABAAMAAAABAAYABAAAAAMAAwAFAAAAAQAGAAYAAAABAAMABwAAAAEABgAIAAAAAQADAAL2Al0QmTwCRZz8X85VbQOnAQAAACMAAQABAQAAAAACAABAQAAAAAAC2H/XZLXBfEuFwyaxpOWSPgEAAAAgAAEAAQEAAAAAAgAAAD8AAAAAAAAAAAEAAAgAAAABAAgAAAACAQAAAAsAAAAAAAAAAAAAAAwAAACgrPRDRXr9wQAAAAAAAAAAAQAACAAAAAEABAAAAAABAAAACwAAAAAAAAAAAAAADAAAACALfcN307vCAAAAAAEAAAAH2H/XZLXBfEuFwyaxpOWSPgEAAAgAAAABAAQAAAABAQAAAAsAAAAAAAAAAAAAAAwAAAAYGpPDRhYSQgAAAAACAAAAAgAAgD8CAACAPwMAAP4vAAABAAIAAAAAAf4vAAABAAMAAAAAAv4vAAABAAYAAAAAAQAAAAsAAAAAAAAAAAAAAAwAAADf9CbCFAsZwQAAAAABAAAAB/YCXRCZPAJFnPxfzlVtA6cBAAAIAAAAAQAGAAAAAQEAAAALAAAAAAAAAAAAAAAMAAAAZaHYwiCFEEMAAAAAAgAAAAIAAAAAAgAAAAADAAD+LwAAAQAEAAAAAgH+LwAAAQAFAAAAAAL+LwAAAQAIAAAAAAEAAAALAAAAAAAAAAAAAAAMAAAAufTZQs17kkIAAAAAAQAAAAf2Al0QmTwCRZz8X85VbQOnAQAACAAAAAEACAAAAAEBAAAACwAAAAAAAAAAAAAADAAAABlUgUKoYnhDAAAAAAIAAAACAAAAAAIAAAAAAwAA/i8AAAEABgAAAAIB/i8AAAEABwAAAAAC/i8AAAEAAQAAAAABAAAACwAAAAAAAAAAAAAADAAAADWgikMz0CFDAAAAAAEAAAAKAAAAAAAAAAAAAAAMAAAAQyKTQ8VkX0OamVk/CQ==",
+		"Parameters": [
+			{
+				"Name": "B",
+				"Index": 0,
+				"Value": 3.0,
+				"OutputIndex": 0
+			},
+			{
+				"Name": "A",
+				"Index": 1,
+				"Value": 0.5,
+				"OutputIndex": 1
+			}
+		]
 	}
 }

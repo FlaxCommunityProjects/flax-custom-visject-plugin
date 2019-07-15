@@ -53,9 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Source\ExpressionGraph.cs" />
-    <Compile Include="Source\GraphNodes\GraphNode.cs" />
-    <Compile Include="Source\GraphNodes\GraphOutput.cs" />
-    <Compile Include="Source\GraphNodes\GraphParameter.cs" />
+    <Compile Include="Source\VisjectGraphs\GraphContext.cs" />
+    <Compile Include="Source\VisjectGraphs\GraphNode.cs" />
+    <Compile Include="Source\VisjectGraphs\GraphOutput.cs" />
+    <Compile Include="Source\VisjectGraphs\GraphParameter.cs" />
     <Compile Include="Cache\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
