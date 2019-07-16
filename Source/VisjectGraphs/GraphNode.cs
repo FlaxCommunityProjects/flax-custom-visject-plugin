@@ -41,7 +41,6 @@ namespace VisjectPlugin.Source.VisjectGraphs
 			OutputIndices = outputIndices ?? throw new ArgumentNullException(nameof(outputIndices));
 		}
 
-		// TODO: Group the variables and actions into something like a context?
 		public void Execute(GraphContext context)
 		{
 			Context = context;

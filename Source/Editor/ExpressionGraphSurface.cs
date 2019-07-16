@@ -10,14 +10,18 @@ using VisjectPlugin.Source.VisjectGraphs;
 
 namespace VisjectPlugin.Source.Editor
 {
+	/// <summary>
+	/// Customized Visject surface for the expression graph
+	/// </summary>
 	public class ExpressionGraphSurface : VisjectSurface
 	{
+		// Group and type id of the main node
 		public const int MainNodeGroupId = 1;
 		public const int MainNodeTypeId = 1;
 
 		// Register the custom archetypes
 		public ExpressionGraphSurface(IVisjectSurfaceOwner owner, Action onSave, FlaxEditor.Undo undo = null, SurfaceStyle style = null)
-			: base(owner, onSave, undo, style, ExpressionGraphGroups)
+			: base(owner, onSave, undo, style, ExpressionGraphGroups) // Passing in our own archetypes
 		{
 
 		}
@@ -53,7 +57,7 @@ namespace VisjectPlugin.Source.Editor
 			}
 		};
 
-		// List of group archetypes
+		// Our group archetypes
 		public static readonly List<GroupArchetype> ExpressionGraphGroups = new List<GroupArchetype>()
 		{
 			// Our own nodes, including the main node
@@ -82,11 +86,18 @@ namespace VisjectPlugin.Source.Editor
 			}
 		};
 
+		/// <summary>
+		/// Compiles the surface to an expression graph instance
+		/// </summary>
+		/// <param name="graph">Expression graph instance</param>
 		public void CompileSurface(ExpressionGraph graph)
 		{
-			GetParameterGetterNodeArchetype(out ushort paramNodeGroupId);
-
+			// We're mapping every output box to an index
+			// This means that we can store all the node outputs in an array
 			var variableIndexGetter = new ExpressionGraphVariables();
+
+			// Get the parameters
+			GetParameterGetterNodeArchetype(out ushort paramNodeGroupId);
 
 			var graphParams = new Dictionary<Guid, GraphParameter>();
 			for (int i = 0; i < Parameters.Count; i++)
@@ -97,16 +108,16 @@ namespace VisjectPlugin.Source.Editor
 
 			graph.Parameters = graphParams.Values.ToArray();
 
+			// Now go over the nodes (depth first) starting from the main node
 			graph.Nodes = FindNode(MainNodeGroupId, MainNodeTypeId)
 				.DepthFirstTraversal()
 				// Turn surface nodes into graph nodes
 				.Select<SurfaceNode, GraphNode>(node =>
 				{
-					GraphNode graphNode;
 					// Internal node values
 					object[] nodeValues = (node.Values ?? new object[0]).ToArray();
 
-					// Input box values
+					// Input boxes
 					int inputBoxesCount = node.Elements.OfType<InputBox>().Count();
 					int[] inputIndices = new int[inputBoxesCount];
 					for (int i = 0; i < inputIndices.Length; i++)
@@ -130,30 +141,30 @@ namespace VisjectPlugin.Source.Editor
 											})
 											.ToArray();
 
-
+					// Output boxes
 					int[] outputIndices = node.Elements
 												.OfType<OutputBox>()
 												.Select(box => variableIndexGetter.RegisterOutputBox(box))
 												.ToArray();
-					// Main node
+
+					// Create the nodes
 					if (node.GroupArchetype.GroupID == MainNodeGroupId && node.Archetype.TypeID == MainNodeTypeId)
 					{
-						graphNode = new GraphOutput(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
+						// Main node
+						return new GraphOutput(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
 					}
 					else if (node.GroupArchetype.GroupID == paramNodeGroupId)
 					{
 						// Parameter node
 						var graphParam = graphParams[(Guid)node.Values[0]];
-						graphNode = new GraphNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, new object[0], new object[1], new int[1] { graphParam.OutputIndex }, outputIndices);
+						return new GraphNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, new object[0], new object[1], new int[1] { graphParam.OutputIndex }, outputIndices);
 
 					}
 					else
 					{
 						// Generic node
-						graphNode = new GraphNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
+						return new GraphNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
 					}
-
-					return graphNode;
 				})
 				.ToArray();
 		}

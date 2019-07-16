@@ -8,13 +8,23 @@ using FlaxEngine;
 
 namespace VisjectPlugin.Source.Editor
 {
-	// TODO: Well, this part might be too fancy
+	/// <summary>
+	/// Used to map output boxes to an index
+	/// </summary>
 	public class ExpressionGraphVariables
 	{
 		private class Variable
 		{
+			/// <summary>
+			/// Index of the variable/output box
+			/// </summary>
 			public int Index;
-			public int UsageCount;
+
+			/// <summary>
+			/// How often it can be used
+			/// If we're done using an output box, we can re-use its index
+			/// </summary>
+			public int UsagesLeft;
 		}
 
 		private Dictionary<Int2, Variable> _connectionIds = new Dictionary<Int2, Variable>();
@@ -45,7 +55,7 @@ namespace VisjectPlugin.Source.Editor
 			{
 				if (!_takenConnectionIds.Contains(i))
 				{
-					_connectionIds.Add(GetBoxId(box), new Variable() { Index = i, UsageCount = box.Connections.Count });
+					_connectionIds.Add(GetBoxId(box), new Variable() { Index = i, UsagesLeft = box.Connections.Count });
 					_takenConnectionIds.Add(i);
 
 					return i;
@@ -85,8 +95,8 @@ namespace VisjectPlugin.Source.Editor
 
 			if (_connectionIds.TryGetValue(GetBoxId(outputBox), out var variable))
 			{
-				variable.UsageCount--;
-				if (variable.UsageCount <= 0)
+				variable.UsagesLeft--;
+				if (variable.UsagesLeft <= 0)
 				{
 					RemoveOutputBox(outputBox);
 				}

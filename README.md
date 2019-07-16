@@ -114,7 +114,7 @@ Once this is done, you should be able to create a new expression graph asset in 
 
 ## Visject Window
 
-Opening the expression graph is currently rather disappointing. So, in this step, we'll create our own window with a Visject surface for it. Such a window has an asset, a surface, a live-preview and a number of parameters.
+Opening the expression graph is currently rather disappointing. So, in this step, we'll create our own window with a Visject surface for it. Such a window has an asset, a temporary copy of the asset, a number of parameters, a surface and a live-preview.
 
 ### Basic Implementation
 

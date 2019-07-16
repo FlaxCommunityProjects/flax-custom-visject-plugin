@@ -11,16 +11,16 @@ namespace VisjectPlugin.Source
 	public class ExpressionGraph
 	{
 		/// <summary>
-		/// Serialized visject surface
+		/// All possible actions
 		/// </summary>
-		public byte[] VisjectSurface { get; set; }
-
 		public static readonly GraphContext.ExecuteAction[][][] Actions;
 
-		private static readonly Random _rng = new Random();
-
+		/// <summary>
+		/// Fill the possible actions <see cref="Actions"/>
+		/// </summary>
 		static ExpressionGraph()
 		{
+
 			var actions = new Dictionary<int, Dictionary<int, Dictionary<int, GraphContext.ExecuteAction>>>();
 
 			void AddAction(int groupId, int typeId, int methodId, GraphContext.ExecuteAction action)
@@ -108,9 +108,29 @@ namespace VisjectPlugin.Source
 			Actions = ActionsToArray();
 		}
 
+		/// <summary>
+		/// Random number generator
+		/// </summary>
+		private static readonly Random _rng = new Random();
+
 		private float _accumulatedTime = 0;
 		private const float UpdatesPerSecond = 3;
 		private const float UpdateDuration = 1f / UpdatesPerSecond;
+
+		private GraphContext _context;
+
+		private GraphOutput _output;
+
+		[Serialize]
+		private GraphNode[] _nodes;
+
+		[Serialize]
+		private int _variablesLength;
+
+		/// <summary>
+		/// Serialized visject surface
+		/// </summary>
+		public byte[] VisjectSurface { get; set; }
 
 		public void Update(float deltaTime)
 		{
@@ -139,16 +159,6 @@ namespace VisjectPlugin.Source
 			// Set the outputs
 			OutputFloat = Output.InputAs<float>(0);
 		}
-
-		private GraphContext _context;
-
-		private GraphOutput _output;
-
-		[Serialize]
-		private GraphNode[] _nodes;
-
-		[Serialize]
-		private int _variablesLength;
 
 		[Serialize]
 		public GraphParameter[] Parameters { get; set; }
