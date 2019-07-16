@@ -10,12 +10,14 @@ namespace VisjectPlugin.Source
 {
 	public class ExpressionGraph
 	{
-		public delegate void ExecuteAction(GraphNode node);
+		public delegate void ExecuteActionHandler(GraphNode node);
 
 		/// <summary>
 		/// All possible actions
 		/// </summary>
-		public static readonly ExecuteAction[][][] Actions;
+		protected static readonly ExecuteActionHandler[][][] Actions;
+
+		protected static readonly Random _rng = new Random();
 
 		/// <summary>
 		/// Fill the possible actions <see cref="Actions"/>
@@ -23,38 +25,38 @@ namespace VisjectPlugin.Source
 		static ExpressionGraph()
 		{
 
-			var actions = new Dictionary<int, Dictionary<int, Dictionary<int, ExecuteAction>>>();
+			var actions = new Dictionary<int, Dictionary<int, Dictionary<int, ExecuteActionHandler>>>();
 
-			void AddAction(int groupId, int typeId, int methodId, ExecuteAction action)
+			void AddAction(int groupId, int typeId, int methodId, ExecuteActionHandler action)
 			{
 				if (!actions.TryGetValue(groupId, out var groupActions))
 				{
-					groupActions = new Dictionary<int, Dictionary<int, ExecuteAction>>();
+					groupActions = new Dictionary<int, Dictionary<int, ExecuteActionHandler>>();
 					actions.Add(groupId, groupActions);
 				}
 
 				if (!groupActions.TryGetValue(typeId, out var typeActions))
 				{
-					typeActions = new Dictionary<int, ExecuteAction>();
+					typeActions = new Dictionary<int, ExecuteActionHandler>();
 					groupActions.Add(typeId, typeActions);
 				}
 
 				typeActions.Add(methodId, action);
 			}
-			ExecuteAction[][][] ActionsToArray()
+			ExecuteActionHandler[][][] ActionsToArray()
 			{
 				var groupActionsCount = actions.Keys.Max() + 1;
-				ExecuteAction[][][] groupActions = new ExecuteAction[groupActionsCount][][];
+				ExecuteActionHandler[][][] groupActions = new ExecuteActionHandler[groupActionsCount][][];
 
 				foreach (var groupIdActions in actions)
 				{
 					var typeActionsCount = groupIdActions.Value.Keys.Max() + 1;
-					ExecuteAction[][] typeActions = new ExecuteAction[typeActionsCount][];
+					ExecuteActionHandler[][] typeActions = new ExecuteActionHandler[typeActionsCount][];
 
 					foreach (var typeIdActions in groupIdActions.Value)
 					{
 						var methodActionsCount = typeIdActions.Value.Keys.Max() + 1;
-						ExecuteAction[] methodActions = new ExecuteAction[methodActionsCount];
+						ExecuteActionHandler[] methodActions = new ExecuteActionHandler[methodActionsCount];
 						foreach (var methodIdAction in typeIdActions.Value)
 						{
 							methodActions[methodIdAction.Key] = methodIdAction.Value;
@@ -112,26 +114,40 @@ namespace VisjectPlugin.Source
 		/// <summary>
 		/// Random number generator
 		/// </summary>
-		private static readonly Random _rng = new Random();
 
-		private float _accumulatedTime = 0;
 		private const float UpdatesPerSecond = 3;
 		private const float UpdateDuration = 1f / UpdatesPerSecond;
+		private float _accumulatedTime = 0;
 
 		private GraphContext _context;
+		private MainNode _outputNode;
 
-		private MainNode _output;
-
-		[Serialize]
+		private GraphParameter[] _parameters;
 		private GraphNode[] _nodes;
-
-		[Serialize]
-		private int _variablesLength;
 
 		/// <summary>
 		/// Serialized visject surface
 		/// </summary>
 		public byte[] VisjectSurface { get; set; }
+
+		public GraphParameter[] Parameters
+		{
+			get => _parameters;
+			set => _parameters = value;
+		}
+
+		public GraphNode[] Nodes
+		{
+			get { return _nodes; }
+			set
+			{
+				_nodes = value;
+				OnNodesSet();
+			}
+		}
+
+		[NoSerialize]
+		public float OutputFloat { get; private set; }
 
 		public void Update(float deltaTime)
 		{
@@ -141,11 +157,6 @@ namespace VisjectPlugin.Source
 			_accumulatedTime = 0;
 
 			if (Nodes == null || Nodes.Length <= 0) return;
-
-			if (_context == null)
-			{
-				_context = new GraphContext(_variablesLength, (groupId, typeId, methodId, node) => Actions[groupId][typeId][methodId].Invoke(node));
-			}
 
 			for (int i = 0; i < Parameters.Length; i++)
 			{
@@ -157,32 +168,32 @@ namespace VisjectPlugin.Source
 			}
 
 			// Set the outputs
-			OutputFloat = Output.InputAs<float>(0);
+			OutputFloat = _outputNode.InputAs<float>(0);
 		}
 
-		[Serialize]
-		public GraphParameter[] Parameters { get; set; }
 
-		[NoSerialize]
-		public GraphNode[] Nodes
+		protected void OnNodesSet()
 		{
-			get { return _nodes; }
-			set
+			if (Nodes == null || Nodes.Length <= 0)
 			{
-				_nodes = value;
-				_output = null;
+				_outputNode = null;
 				_context = null;
-				_variablesLength = Math.Max(Parameters.Max(p => p.OutputIndex) + 1, _nodes.Max(node => node.OutputIndices.DefaultIfEmpty(0).Max()) + 1);
+
+			}
+			else
+			{
+				_outputNode = _nodes.OfType<MainNode>().First();
+				int maxVariableIndex = Math.Max(
+						Parameters.Max(p => p.OutputIndex),
+						_nodes.Max(node => node.OutputIndices.DefaultIfEmpty(0).Max())
+					);
+				_context = new GraphContext(maxVariableIndex + 1, ExecuteAction);
 			}
 		}
 
-		[NoSerialize]
-		public MainNode Output
+		protected void ExecuteAction(int groupId, int typeId, int methodId, GraphNode graphNode)
 		{
-			// Also fixes the Json serialisation
-			get { return _output ?? (_output = _nodes.OfType<MainNode>().First()); }
+			Actions[groupId][typeId][methodId].Invoke(graphNode);
 		}
-
-		public float OutputFloat { get; private set; }
 	}
 }
