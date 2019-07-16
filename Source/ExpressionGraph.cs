@@ -10,10 +10,12 @@ namespace VisjectPlugin.Source
 {
 	public class ExpressionGraph
 	{
+		public delegate void ExecuteAction(GraphNode node);
+
 		/// <summary>
 		/// All possible actions
 		/// </summary>
-		public static readonly GraphContext.ExecuteAction[][][] Actions;
+		public static readonly ExecuteAction[][][] Actions;
 
 		/// <summary>
 		/// Fill the possible actions <see cref="Actions"/>
@@ -21,38 +23,38 @@ namespace VisjectPlugin.Source
 		static ExpressionGraph()
 		{
 
-			var actions = new Dictionary<int, Dictionary<int, Dictionary<int, GraphContext.ExecuteAction>>>();
+			var actions = new Dictionary<int, Dictionary<int, Dictionary<int, ExecuteAction>>>();
 
-			void AddAction(int groupId, int typeId, int methodId, GraphContext.ExecuteAction action)
+			void AddAction(int groupId, int typeId, int methodId, ExecuteAction action)
 			{
 				if (!actions.TryGetValue(groupId, out var groupActions))
 				{
-					groupActions = new Dictionary<int, Dictionary<int, GraphContext.ExecuteAction>>();
+					groupActions = new Dictionary<int, Dictionary<int, ExecuteAction>>();
 					actions.Add(groupId, groupActions);
 				}
 
 				if (!groupActions.TryGetValue(typeId, out var typeActions))
 				{
-					typeActions = new Dictionary<int, GraphContext.ExecuteAction>();
+					typeActions = new Dictionary<int, ExecuteAction>();
 					groupActions.Add(typeId, typeActions);
 				}
 
 				typeActions.Add(methodId, action);
 			}
-			GraphContext.ExecuteAction[][][] ActionsToArray()
+			ExecuteAction[][][] ActionsToArray()
 			{
 				var groupActionsCount = actions.Keys.Max() + 1;
-				GraphContext.ExecuteAction[][][] groupActions = new GraphContext.ExecuteAction[groupActionsCount][][];
+				ExecuteAction[][][] groupActions = new ExecuteAction[groupActionsCount][][];
 
 				foreach (var groupIdActions in actions)
 				{
 					var typeActionsCount = groupIdActions.Value.Keys.Max() + 1;
-					GraphContext.ExecuteAction[][] typeActions = new GraphContext.ExecuteAction[typeActionsCount][];
+					ExecuteAction[][] typeActions = new ExecuteAction[typeActionsCount][];
 
 					foreach (var typeIdActions in groupIdActions.Value)
 					{
 						var methodActionsCount = typeIdActions.Value.Keys.Max() + 1;
-						GraphContext.ExecuteAction[] methodActions = new GraphContext.ExecuteAction[methodActionsCount];
+						ExecuteAction[] methodActions = new ExecuteAction[methodActionsCount];
 						foreach (var methodIdAction in typeIdActions.Value)
 						{
 							methodActions[methodIdAction.Key] = methodIdAction.Value;
@@ -103,7 +105,6 @@ namespace VisjectPlugin.Source
 
 			// Parameter
 			AddAction(6, 1, 0, (node) => { node.Return<object>(0, node.InputValues[0]); });
-			// TODO: node.ContextAs<ExpressionGraphContext>()
 
 			Actions = ActionsToArray();
 		}
@@ -119,7 +120,7 @@ namespace VisjectPlugin.Source
 
 		private GraphContext _context;
 
-		private GraphOutput _output;
+		private MainNode _output;
 
 		[Serialize]
 		private GraphNode[] _nodes;
@@ -143,10 +144,9 @@ namespace VisjectPlugin.Source
 
 			if (_context == null)
 			{
-				_context = new GraphContext(_variablesLength, ExpressionGraph.Actions, 1);
+				_context = new GraphContext(_variablesLength, (groupId, typeId, methodId, node) => Actions[groupId][typeId][methodId].Invoke(node));
 			}
 
-			_context.IterationIndex = 0;
 			for (int i = 0; i < Parameters.Length; i++)
 			{
 				Parameters[i].Execute(_context);
@@ -177,10 +177,10 @@ namespace VisjectPlugin.Source
 		}
 
 		[NoSerialize]
-		public GraphOutput Output
+		public MainNode Output
 		{
 			// Also fixes the Json serialisation
-			get { return _output ?? (_output = _nodes.OfType<GraphOutput>().First()); }
+			get { return _output ?? (_output = _nodes.OfType<MainNode>().First()); }
 		}
 
 		public float OutputFloat { get; private set; }

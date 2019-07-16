@@ -9,9 +9,9 @@ namespace VisjectPlugin.Source.VisjectGraphs
 	/// <summary>
 	/// The main output node of the graph
 	/// </summary>
-	public class GraphOutput : GraphNode
+	public class MainNode : GraphNode
 	{
-		public GraphOutput(int groupId, int typeId, int methodId, object[] values, object[] inputValues, int[] inputIndices, int[] outputIndices)
+		public MainNode(int groupId, int typeId, int methodId, object[] values, object[] inputValues, int[] inputIndices, int[] outputIndices)
 			: base(groupId, typeId, methodId, values, inputValues, inputIndices, outputIndices)
 		{
 		}

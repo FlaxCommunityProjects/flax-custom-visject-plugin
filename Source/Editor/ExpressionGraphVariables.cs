@@ -108,18 +108,19 @@ namespace VisjectPlugin.Source.Editor
 			}
 		}
 
+		private void RemoveOutputBox(Box box)
+		{
+			var id = GetBoxId(box);
+			if (_connectionIds.TryGetValue(id, out var variable))
+			{
+				_connectionIds.Remove(id);
+				_takenConnectionIds.Remove(variable.Index);
+			}
+		}
+
 		private Int2 GetBoxId(Box box)
 		{
 			return new Int2((int)box.ParentNode.ID, box.ID);
-		}
-
-		private void RemoveOutputBox(Box box)
-		{
-			if (_connectionIds.TryGetValue(GetBoxId(box), out var variable))
-			{
-				_connectionIds.Remove(GetBoxId(box));
-				_takenConnectionIds.Remove(variable.Index);
-			}
 		}
 	}
 }

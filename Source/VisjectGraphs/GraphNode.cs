@@ -24,7 +24,15 @@ namespace VisjectPlugin.Source.VisjectGraphs
 		/// Input values from input boxes
 		/// </summary>
 		public object[] InputValues;
+
+		/// <summary>
+		/// Where do we get the inputs from
+		/// </summary>
 		public int[] InputIndices;
+
+		/// <summary>
+		/// Where should we write the outputs to
+		/// </summary>
 		public int[] OutputIndices;
 
 		public GraphContext Context { get; private set; }
@@ -45,10 +53,10 @@ namespace VisjectPlugin.Source.VisjectGraphs
 		{
 			Context = context;
 			UpdateInputValues(context.Variables);
-			context.Actions[GroupId][TypeId][MethodId].Invoke(this);
+			context.ExecuteAction(GroupId, TypeId, MethodId, this);
 		}
 
-		public void UpdateInputValues(IList<object> variables)
+		protected void UpdateInputValues(IList<object> variables)
 		{
 			for (int i = 0; i < InputIndices.Length; i++)
 			{

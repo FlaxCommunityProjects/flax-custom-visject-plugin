@@ -7,26 +7,23 @@ using FlaxEngine;
 
 namespace VisjectPlugin.Source.VisjectGraphs
 {
+	/// <summary>
+	/// Current context, includes the internal variables
+	/// </summary>
 	public class GraphContext
 	{
-		public delegate void ExecuteAction(GraphNode node);
+		public delegate void ExecuteActionCallback(int groupId, int typeId, int methodId, GraphNode graphNode);
 
-		[NoSerialize]
 		public List<object> Variables;
 
-		[NoSerialize]
-		public ExecuteAction[][][] Actions;
+		public ExecuteActionCallback ExecuteAction;
 
-		public int IterationIndex;
+		// This could include other variables such as "xy-coordinates"
 
-		[NoSerialize]
-		public int IterationsCount;
-
-		public GraphContext(int variablesLength, ExecuteAction[][][] actions, int iterationsCount)
+		public GraphContext(int variablesLength, ExecuteActionCallback executeAction)
 		{
-			Variables = new List<object>(new object[variablesLength]);
-			Actions = actions ?? throw new ArgumentNullException(nameof(actions));
-			IterationsCount = iterationsCount;
+			Variables = new List<object>(Enumerable.Repeat<object>(null, variablesLength));
+			ExecuteAction = executeAction ?? throw new ArgumentNullException(nameof(executeAction));
 		}
 	}
 }

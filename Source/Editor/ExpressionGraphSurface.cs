@@ -151,7 +151,7 @@ namespace VisjectPlugin.Source.Editor
 					if (node.GroupArchetype.GroupID == MainNodeGroupId && node.Archetype.TypeID == MainNodeTypeId)
 					{
 						// Main node
-						return new GraphOutput(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
+						return new MainNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
 					}
 					else if (node.GroupArchetype.GroupID == paramNodeGroupId)
 					{
