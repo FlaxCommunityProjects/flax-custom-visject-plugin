@@ -830,38 +830,19 @@ public class ExpressionGraphPreview : AssetPreview
 }
 ```
 
+The final result should look similar to this
+
+![End result](./img/Expression_Graph.png)
 
 
-`<Screenshot>`
 
 ## Going Further
 
 A simple idea for going further is to evaluate the same graph multiple times. For example, the material graph is evaluated for every single pixel on the screen. 
 
+So, a simple graphing calculator can be created by adding a custom "Get X-Coordinate" node and then evaluating the graph once for every value on the x-axis. Then, the output can be plotted by drawing line segments through those points.
+
+![Graphing Calculator](./img/Graph_Graph.png)
 
 
-Graphing (executing the same thing, but with different coordinates)
-
-`<Screenshot>`
-
-
-
-```
-in c++ we have in-build implicit casting for basic types, we could add some methdos to c#
-Waiting for this...
-```
-
-
-
-## Custom Material Surface
-
-TODO: How to inject nodes by replacing them with custom code nodez?
-
-
-
-```
-            //window.Surface.Context.Saving
-            //window.Surface.Context.Saved
-            // How do you get the window or surface...
-```
 
