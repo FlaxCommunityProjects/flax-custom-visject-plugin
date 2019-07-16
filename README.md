@@ -619,7 +619,7 @@ public ExpressionGraphSurface(IVisjectSurfaceOwner owner, Action onSave, FlaxEdi
 }
 ```
 
-And then we can fill our list of group archetypes with our own ones. We can also use existing node archetypes.
+And then we can fill our list of group archetypes with our own ones. We can also use [existing node archetypes] `(TODO: Link)`.
 
 ```csharp
 // Our own node archetypes
@@ -711,27 +711,13 @@ A simple approach for doing so is to go over the surface in a *depth first* mann
 
 ### Compiling the Surface Nodes - Background Information
 
-The runtime version of the graph consists of the following:
+The Visject graph has a number of important parts that need to be compiled into our output
 
 - Input parameters
-
-- A part that can be executed
-
-- An output
-
-  
-
-The input parameters are stored in a `Parameters` list. The most important things of a parameter are its name,  value and guid. 
-
-Also important is the index of the parameter in the list. This index is used for the live-updating the preview when undoing and redoing actions. The code for that has to be implemented in `OnParamEditUndo` in the file `ExpressionGraphWindow.cs`.
+- Nodes
+- An output node
 
 
-
-`<Nodes, boxes, mapping>`
-
-
-
-TODO: Links to [Group Archetypes](https://github.com/FlaxEngine/FlaxAPI/blob/master/FlaxEditor/Surface/NodeFactory.cs) , [Archetypes](https://github.com/FlaxEngine/FlaxAPI/tree/master/FlaxEditor/Surface/Archetypes)
 
 For the surface compilation, add a method to the `ExpressionGraph`. 
 
@@ -742,7 +728,7 @@ public void CompileSurface(ExpressionGraph graph)
 }
 ```
 
-Then, to automatically compile the surface node, modify the `SaveSurface` method in `ExpressionGraphWindow.cs` to include a call to the surface compilation method.
+Then, to automatically compile the surface, modify the `SaveSurface` method in `ExpressionGraphWindow.cs` to include a call to the surface compilation method.
 
 ```csharp
  /// <inheritdoc />
@@ -757,6 +743,36 @@ Then, to automatically compile the surface node, modify the `SaveSurface` method
 ```
 
 
+
+The input parameters are stored in the `Parameters` list. The most important parts of a parameter are the following
+
+```csharp
+var param = Parameters[0];
+param.ID; // Used to map the parameter-nodes to the parameters
+param.Name; // The name of the param
+param.Value; // The value of the param
+0 // The index of the param in the list. Used for live-updating the preview.
+```
+
+The index of the parameter in the `Parameters` list is used for the live-updating the preview when undoing and redoing actions. The code for that has to be implemented in `OnParamEditUndo` in the file `ExpressionGraphWindow.cs`.
+
+
+
+The nodes are stored in the `Nodes` list. The most important parts of a node are the following
+
+```csharp
+node.GroupArchetype.GroupID; // Which group-archetype the node belongs to
+node.Archetype.TypeID; // Which node-archetype
+node.Values; // The internal values of the node
+node.Elements.OfType<InputBox>(); // Inputs
+node.Elements.OfType<OutputBox>(); // Outputs
+```
+
+Every node has a number of `Box`es for the inputs and outputs. Those boxes have `Connections` which are the boxes they are connected to. To map from an input box to a node value, use `node.Values[ someInputBox.Archetype.ValueIndex ]`.
+
+
+
+Lastly, the output node, or main node, can be obtained using `FindNode(MainNodeGroupId, MainNodeTypeId)`.
 
 ### Compiling the Surface Nodes - Interpreter Approach
 
