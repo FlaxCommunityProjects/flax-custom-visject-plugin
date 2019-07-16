@@ -715,6 +715,7 @@ The Visject graph has a number of important parts that need to be compiled into 
 
 - Input parameters
 - Nodes
+  - with their inputs and outputs
 - An output node
 
 
@@ -754,7 +755,7 @@ param.Value; // The value of the param
 0 // The index of the param in the list. Used for live-updating the preview.
 ```
 
-The index of the parameter in the `Parameters` list is used for the live-updating the preview when undoing and redoing actions. The code for that has to be implemented in `OnParamEditUndo` in the file `ExpressionGraphWindow.cs`.
+The index of the parameter in the `Parameters` list is used for the live-updating the preview in the function `OnParamEditUndo` in the file `ExpressionGraphWindow.cs`. This needs to be implemented.
 
 
 
@@ -768,21 +769,24 @@ node.Elements.OfType<InputBox>(); // Inputs
 node.Elements.OfType<OutputBox>(); // Outputs
 ```
 
-Every node has a number of `Box`es for the inputs and outputs. Those boxes have `Connections` which are the boxes they are connected to. To map from an input box to a node value, use `node.Values[ someInputBox.Archetype.ValueIndex ]`.
+Every node has a number of `Box`es for the inputs and outputs. Those boxes have
+
+```csharp
+box.Connections[index]; // The boxes connected to this one
+box.Archetype.ValueIndex; // Index of the box in node.Values[ ]
+```
 
 
 
 Lastly, the output node, or main node, can be obtained using `FindNode(MainNodeGroupId, MainNodeTypeId)`.
 
-### Compiling the Surface Nodes - Interpreter Approach
+### Compiling and Executing - Interpreter Approach
 
 The following part will go through a simple interpreter approach. For every node in the Visject surface, a runtime version is created. Then, at runtime, those nodes get executed. Internally, the runtime version also has a variables collection, where the inputs and outputs of the nodes get stored.
 
 `<Surface nodes compilation>`
 
-### Executing
 
-`<Executing it>`
 
 ### Preview
 
