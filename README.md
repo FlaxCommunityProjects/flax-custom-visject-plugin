@@ -30,13 +30,13 @@ public class ExpressionGraph
 }
 ```
 
-This asset type will be a [json asset].
+This asset type will be a [json asset](https://docs.flaxengine.com/api/FlaxEngine.JsonAsset.html).
 
 
 
 ## Asset Proxy
 
-To create and open assets using the Flax Editor, an asset proxy is required. Since it's an editor file, it needs to be in the editor assembly. To do so, create a new folder called `Editor`. In this folder, create an asset proxy. 
+To create and open assets using the Flax Editor, an [asset proxy](https://docs.flaxengine.com/api/FlaxEditor.Content.AssetProxy.html) is required. Since it's an editor file, it needs to be in the editor assembly. To do so, create a new folder called `Editor`. In this folder, create an asset proxy. 
 
 ```csharp
 public class ExpressionGraphProxy : JsonAssetProxy // JSON files
@@ -504,9 +504,9 @@ public class ExpressionGraphWindow : VisjectSurfaceWindow<JsonAsset, ExpressionG
 
 ### Saving and Loading
 
-Usually an asset has a `SaveSurface` and a `LoadSurface` method. To implement those methods, we need to call functions from the editor assembly such as `FlaxEditor.Editor.SaveJsonAsset`. However, we can't reference the editor assembly from the game assembly(???), so we'll have to put those functions somewhere else. `ExpressionGraphSurface.cs` seems like a nice candidate for them.
+Usually an asset has a `SaveSurface` and a `LoadSurface` method. To implement those methods, we need to call functions from the editor assembly such as `FlaxEditor.Editor.SaveJsonAsset`. However, we can't reference the editor assembly from the game assembly. Thus, we'll put those functions in `ExpressionGraphSurface.cs`.
 
-The surface loading method tried to load the surface from an ExpressionGraph instance. If the surface doesn't exist yet, it creates a new Visject surface context, adds the root node and returns that.
+The surface loading method tried to load the surface from an ExpressionGraph instance. If the surface doesn't exist yet, it creates a new Visject surface context with a main node and returns that.
 
 The surface saving method saves the surface to the asset instance. It then saves the asset instance as json to the hard drive.
 
@@ -546,16 +546,16 @@ public static byte[] LoadSurface(JsonAsset asset, ExpressionGraph assetInstance,
     if (createDefaultIfMissing)
     {
         // A bit of a hack
-        // Create a Visject Graph with a root node and serialize it!
+        // Create a Visject Graph with a main node and serialize it!
         var surfaceContext = new VisjectSurfaceContext(null, null, new FakeSurfaceContext());
 
-        // Add the root node
+        // Add the main node
         // TODO: Change NodeFactory.DefaultGroups to your list of group archetypes
         var node = NodeFactory.CreateNode(NodeFactory.DefaultGroups, 1, surfaceContext, MainNodeGroupId, MainNodeTypeId);
         
         if (node == null)
         {
-            Debug.LogWarning("Failed to create root node.");
+            Debug.LogWarning("Failed to create main node.");
             return null;
         }
         surfaceContext.Nodes.Add(node);
@@ -599,7 +599,7 @@ public override EditorWindow Open(FlaxEditor.Editor editor, ContentItem item)
 
 
 
-Congratulations, you now have your own Visject surface.
+Congratulations, you now have your own Visject surface!
 
 ![Expression Graph Surface](./img/Number_Graph_Window.png)
 
@@ -709,7 +709,7 @@ To run the Visject surface in a built game, you need to create a runtime represe
 
 A simple approach for doing so is to go over the surface in a *depth first* manner. This makes it easy to execute the nodes in a correct order, where every node gets executed *after* the nodes before it have finished. It also conveniently detects cycles in the graph.
 
-### Compiling the Surface Nodes - Background Information
+
 
 The Visject graph has a number of important parts that need to be compiled into our output
 
@@ -745,7 +745,7 @@ Then, to automatically compile the surface, modify the `SaveSurface` method in `
 
 
 
-The input parameters are stored in the `Parameters` list. The most important parts of a parameter are the following
+The input parameters are stored in the [`Parameters` list](https://docs.flaxengine.com/api/FlaxEditor.Surface.VisjectSurface.html#FlaxEditor_Surface_VisjectSurface_Parameters). The most important parts of a parameter are the following
 
 ```csharp
 var param = Parameters[0];
@@ -755,11 +755,22 @@ param.Value; // The value of the param
 0 // The index of the param in the list. Used for live-updating the preview.
 ```
 
-The index of the parameter in the `Parameters` list is used for the live-updating the preview in the function `OnParamEditUndo` in the file `ExpressionGraphWindow.cs`. This needs to be implemented.
+The index of the parameter in the `Parameters` list is used for the live-updating the preview in the function `OnParamEditUndo` in the file `ExpressionGraphWindow.cs`. 
+
+```csharp
+/// <inheritdoc />
+protected override void OnParamEditUndo(EditParamAction action, object value)
+{
+	base.OnParamEditUndo(action, value);
+
+	// TODO: Update the asset value to have nice live preview
+	_assetInstance.Parameters[action.Index].Value = value;
+}
+```
 
 
 
-The nodes are stored in the `Nodes` list. The most important parts of a node are the following
+The nodes are stored in the [`Nodes` list](https://docs.flaxengine.com/api/FlaxEditor.Surface.VisjectSurface.html#FlaxEditor_Surface_VisjectSurface_Nodes). The most important parts of a node are the following
 
 ```csharp
 node.GroupArchetype.GroupID; // Which group-archetype the node belongs to
@@ -769,7 +780,7 @@ node.Elements.OfType<InputBox>(); // Inputs
 node.Elements.OfType<OutputBox>(); // Outputs
 ```
 
-Every node has a number of `Box`es for the inputs and outputs. Those boxes have
+Every node has a number of [`Box`](https://docs.flaxengine.com/api/FlaxEditor.Surface.Elements.Box.html)es for the inputs and outputs. Those boxes have
 
 ```csharp
 box.Connections[index]; // The boxes connected to this one
@@ -779,12 +790,6 @@ box.Archetype.ValueIndex; // Index of the box in node.Values[ ]
 
 
 Lastly, the output node, or main node, can be obtained using `FindNode(MainNodeGroupId, MainNodeTypeId)`.
-
-### Compiling and Executing - Interpreter Approach
-
-The following part will go through a simple interpreter approach. For every node in the Visject surface, a runtime version is created. Then, at runtime, those nodes get executed. Internally, the runtime version also has a variables collection, where the inputs and outputs of the nodes get stored.
-
-`<Surface nodes compilation>`
 
 
 
@@ -847,6 +852,4 @@ A simple idea for going further is to evaluate the same graph multiple times. Fo
 So, a simple graphing calculator can be created by adding a custom "Get X-Coordinate" node and then evaluating the graph once for every value on the x-axis. Then, the output can be plotted by drawing line segments through those points.
 
 ![Graphing Calculator](./img/Graph_Graph.png)
-
-
 

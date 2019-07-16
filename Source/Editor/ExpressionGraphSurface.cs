@@ -193,14 +193,14 @@ namespace VisjectPlugin.Source.Editor
 			if (createDefaultIfMissing)
 			{
 				// A bit of a hack
-				// Create a Visject Graph with a root node and serialize it!
+				// Create a Visject Graph with a main node and serialize it!
 				var surfaceContext = new VisjectSurfaceContext(null, null, new FakeSurfaceContext());
 
-				// Add the root node
+				// Add the main node
 				var node = NodeFactory.CreateNode(ExpressionGraphGroups, 1, surfaceContext, MainNodeGroupId, MainNodeTypeId);
 				if (node == null)
 				{
-					Debug.LogWarning("Failed to create root node.");
+					Debug.LogWarning("Failed to create main node.");
 					return null;
 				}
 				surfaceContext.Nodes.Add(node);
