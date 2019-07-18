@@ -24,7 +24,7 @@ namespace VisjectPlugin.Source
 		/// </summary>
 		static ExpressionGraph()
 		{
-
+			// Some helpers to make filling the Actions[][][] easier.
 			var actions = new Dictionary<int, Dictionary<int, Dictionary<int, ExecuteActionHandler>>>();
 
 			void AddAction(int groupId, int typeId, int methodId, ExecuteActionHandler action)
@@ -68,6 +68,7 @@ namespace VisjectPlugin.Source
 
 				return groupActions;
 			}
+
 			// Main node
 			AddAction(1, 1, 0, (_) => { });
 			// Random float
@@ -111,14 +112,6 @@ namespace VisjectPlugin.Source
 			Actions = ActionsToArray();
 		}
 
-		/// <summary>
-		/// Random number generator
-		/// </summary>
-
-		private const float UpdatesPerSecond = 3;
-		private const float UpdateDuration = 1f / UpdatesPerSecond;
-		private float _accumulatedTime = 0;
-
 		private GraphContext _context;
 		private MainNode _outputNode;
 
@@ -151,23 +144,24 @@ namespace VisjectPlugin.Source
 
 		public void Update(float deltaTime)
 		{
-			_accumulatedTime += deltaTime;
-			if (_accumulatedTime < UpdateDuration) return;
-
-			_accumulatedTime = 0;
-
 			if (Nodes == null || Nodes.Length <= 0) return;
 
+			// Update the parameters
+			// Each parameter will write its Value to the context
 			for (int i = 0; i < Parameters.Length; i++)
 			{
 				Parameters[i].Execute(_context);
 			}
+			// Update the nodes
+			// Each node will get its inputs from the context
+			//    Then, each node will execute its associated action
+			//    Lastly, it will write the outputs to the context
 			for (int i = 0; i < Nodes.Length; i++)
 			{
 				Nodes[i].Execute(_context);
 			}
 
-			// Set the outputs
+			// Final outputs
 			OutputFloat = _outputNode.InputAs<float>(0);
 		}
 
@@ -183,6 +177,7 @@ namespace VisjectPlugin.Source
 			else
 			{
 				_outputNode = _nodes.OfType<MainNode>().First();
+
 				int maxVariableIndex = Math.Max(
 						Parameters.Max(p => p.OutputIndex),
 						_nodes.Max(node => node.OutputIndices.DefaultIfEmpty(0).Max())

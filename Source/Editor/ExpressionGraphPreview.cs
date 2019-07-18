@@ -14,6 +14,9 @@ namespace VisjectPlugin.Source.Editor
 	/// </summary>
 	public class ExpressionGraphPreview : AssetPreview
 	{
+		private float UpdateDuration = 1f / 3f;
+		private float _accumulatedTime;
+
 		public ExpressionGraphPreview(bool useWidgets) : base(useWidgets)
 		{
 		}
@@ -28,7 +31,14 @@ namespace VisjectPlugin.Source.Editor
 			base.Update(deltaTime);
 
 			// Manually update simulation
-			ExpressionGraph?.Update(deltaTime);
+
+			// Run it at a slow speed
+			_accumulatedTime += deltaTime;
+			if (_accumulatedTime > UpdateDuration)
+			{
+				_accumulatedTime = 0;
+				ExpressionGraph?.Update(deltaTime);
+			}
 		}
 
 		/// <inheritdoc />

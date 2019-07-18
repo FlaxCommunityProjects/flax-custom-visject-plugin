@@ -703,14 +703,6 @@ var node = NodeFactory.CreateNode(ExpressionGraphGroups, 1, surfaceContext, Main
 
 To run the Visject surface in a built game, you need to create a runtime representation of it. For example, you could go over every node and turn it into shader code. Or you could copy the surface nodes and run a simple interpreter at runtime.
 
-> ![Note]
->
-> Note: You cannot reference `SurfaceNode` at runtime, because it is in the Editor assembly. So, you have to copy every single node to your own class if you want to write an interpreter.
-
-A simple approach for doing so is to go over the surface in a *depth first* manner. This makes it easy to execute the nodes in a correct order, where every node gets executed *after* the nodes before it have finished. It also conveniently detects cycles in the graph.
-
-
-
 The Visject graph has a number of important parts that need to be compiled into our output
 
 - Input parameters
@@ -790,6 +782,20 @@ box.Archetype.ValueIndex; // Index of the box in node.Values[ ]
 
 
 Lastly, the output node, or main node, can be obtained using `FindNode(MainNodeGroupId, MainNodeTypeId)`.
+
+
+
+### Example Implementation
+
+A simple way to execute a Visject surface at runtime is making a copy of it and running an interpreter over it.
+
+> ![Note]
+>
+> Note: You cannot reference `SurfaceNode` at runtime, because it is in the Editor assembly. So, you have to copy every single node to your own class if you want to write an interpreter.
+
+To copy a surface, iterate over it in a *depth first* manner. This makes it easy to execute the nodes in a correct order, where every node gets executed *after* the nodes before it have finished. It also conveniently detects cycles in the graph.
+
+An example implementation can be found in the [custom Visject surface sample project].
 
 
 

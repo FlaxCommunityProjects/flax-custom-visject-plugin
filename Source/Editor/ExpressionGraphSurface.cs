@@ -93,7 +93,7 @@ namespace VisjectPlugin.Source.Editor
 		public void CompileSurface(ExpressionGraph graph)
 		{
 			// We're mapping every output box to an index
-			// This means that we can store all the node outputs in an array
+			// So we can store the node outputs in an array
 			var variableIndexGetter = new ExpressionGraphVariables();
 
 			// Get the parameters
@@ -106,38 +106,36 @@ namespace VisjectPlugin.Source.Editor
 				graphParams.Add(param.ID, new GraphParameter(param.Name, i, param.Value, variableIndexGetter.RegisterNewVariable()));
 			}
 
+			// Set the parameters
 			graph.Parameters = graphParams.Values.ToArray();
 
 			// Now go over the nodes (depth first) starting from the main node
 			graph.Nodes = FindNode(MainNodeGroupId, MainNodeTypeId)
 				.DepthFirstTraversal()
 				// Turn surface nodes into graph nodes
-				.Select<SurfaceNode, GraphNode>(node =>
+				.Select(node =>
 				{
 					// Internal node values
 					object[] nodeValues = (node.Values ?? new object[0]).ToArray();
 
-					// Input boxes
-					int inputBoxesCount = node.Elements.OfType<InputBox>().Count();
-					int[] inputIndices = new int[inputBoxesCount];
-					for (int i = 0; i < inputIndices.Length; i++)
-					{
-						inputIndices[i] = -1;
-					}
-
+					// Input boxes - Values
 					object[] inputValues = node.Elements
 											.OfType<InputBox>()
-											.Select((inputBox, index) =>
+											.Select(inputBox =>
 											{
-												// Side effect: Set the connections
-												if (inputBox.HasAnyConnection)
-												{
-													inputIndices[index] = variableIndexGetter.UseInputBox(inputBox);
-												}
-
 												// Input box has a value
 												int valueIndex = inputBox.Archetype.ValueIndex;
 												return (valueIndex != -1) ? nodeValues[valueIndex] : null;
+											})
+											.ToArray();
+					// Input boxes - Indices
+					int[] inputIndices = node.Elements
+											.OfType<InputBox>()
+											.Select(inputBox =>
+											{
+												// Set the connections
+												bool hasConnection = inputBox.HasAnyConnection;
+												return (hasConnection) ? variableIndexGetter.UseInputBox(inputBox) : -1;
 											})
 											.ToArray();
 
@@ -147,30 +145,34 @@ namespace VisjectPlugin.Source.Editor
 												.Select(box => variableIndexGetter.RegisterOutputBox(box))
 												.ToArray();
 
+					int groupId = node.GroupArchetype.GroupID;
+					int typeId = node.Archetype.TypeID;
+					int methodId = 0;
+
 					// Create the nodes
-					if (node.GroupArchetype.GroupID == MainNodeGroupId && node.Archetype.TypeID == MainNodeTypeId)
+					if (groupId == MainNodeGroupId && typeId == MainNodeTypeId)
 					{
 						// Main node
-						return new MainNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
+						return new MainNode(groupId, typeId, methodId, nodeValues, inputValues, inputIndices, outputIndices);
 					}
-					else if (node.GroupArchetype.GroupID == paramNodeGroupId)
+					else if (groupId == paramNodeGroupId)
 					{
 						// Parameter node
 						var graphParam = graphParams[(Guid)node.Values[0]];
-						return new GraphNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, new object[0], new object[1], new int[1] { graphParam.OutputIndex }, outputIndices);
+						return new GraphNode(groupId, typeId, methodId, new object[0], new object[1], new int[1] { graphParam.OutputIndex }, outputIndices);
 
 					}
 					else
 					{
 						// Generic node
-						return new GraphNode(node.GroupArchetype.GroupID, node.Archetype.TypeID, 0, nodeValues, inputValues, inputIndices, outputIndices);
+						return new GraphNode(groupId, typeId, methodId, nodeValues, inputValues, inputIndices, outputIndices);
 					}
 				})
 				.ToArray();
 		}
 
 		/// <summary>
-		/// For saving and loading surfaces
+		/// For saving and loading surfaces without having to create a proper surface context
 		/// </summary>
 		private class FakeSurfaceContext : ISurfaceContext
 		{
