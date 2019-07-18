@@ -179,7 +179,7 @@ namespace VisjectPlugin.Source
 				_outputNode = _nodes.OfType<MainNode>().First();
 
 				int maxVariableIndex = Math.Max(
-						Parameters.Max(p => p.OutputIndex),
+						Parameters.Select(p => p.OutputIndex).DefaultIfEmpty(0).Max(),
 						_nodes.Max(node => node.OutputIndices.DefaultIfEmpty(0).Max())
 					);
 				_context = new GraphContext(maxVariableIndex + 1, ExecuteAction);
