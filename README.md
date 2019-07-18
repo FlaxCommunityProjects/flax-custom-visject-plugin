@@ -859,3 +859,6 @@ So, a simple graphing calculator can be created by adding a custom "Get X-Coordi
 
 ![Graphing Calculator](./img/Graph_Graph.png)
 
+
+
+![Gif](./img/Expression_Graph_Graphing.gif)
