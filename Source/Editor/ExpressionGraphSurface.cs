@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlaxEditor;
 using FlaxEditor.Surface;
 using FlaxEditor.Surface.Elements;
 using FlaxEngine;
@@ -20,7 +21,7 @@ namespace VisjectPlugin.Source.Editor
 		public const int MainNodeTypeId = 1;
 
 		// Register the custom archetypes
-		public ExpressionGraphSurface(IVisjectSurfaceOwner owner, Action onSave, FlaxEditor.Undo undo = null, SurfaceStyle style = null)
+		public ExpressionGraphSurface(IVisjectSurfaceOwner owner, Action onSave, Undo undo = null, SurfaceStyle style = null)
 			: base(owner, onSave, undo, style, ExpressionGraphGroups) // Passing in our own archetypes
 		{
 
