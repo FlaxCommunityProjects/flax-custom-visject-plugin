@@ -14,11 +14,12 @@ namespace VisjectPlugin.Source.Editor
     /// </summary>
     public class ExpressionGraphPreview : AssetPreview
     {
-        private float UpdateDuration = 1f / 3f;
-        private float _accumulatedTime;
+        private float[] _graphValues = new float[0];
 
         public ExpressionGraphPreview(bool useWidgets) : base(useWidgets)
         {
+            ShowDefaultSceneActors = false;
+            Task.Enabled = false;
         }
 
         /// <summary>
@@ -31,14 +32,7 @@ namespace VisjectPlugin.Source.Editor
             base.Update(deltaTime);
 
             // Manually update simulation
-
-            // Run it at a slow speed
-            _accumulatedTime += deltaTime;
-            if (_accumulatedTime > UpdateDuration)
-            {
-                _accumulatedTime = 0;
-                ExpressionGraph?.Update(deltaTime);
-            }
+            ExpressionGraph?.Update(deltaTime);
         }
 
         /// <inheritdoc />
@@ -48,14 +42,28 @@ namespace VisjectPlugin.Source.Editor
 
             if (ExpressionGraph == null) return;
 
-            // Just draw the output number
-            Render2D.DrawText(
-                Style.Current.FontLarge,
-                $"Float: {ExpressionGraph.OutputFloat}\n",
-                new Rectangle(Vector2.Zero, Size),
-                Color.Wheat,
-                TextAlignment.Near,
-                TextAlignment.Far);
+            if (ExpressionGraph.OutputFloats.Length != _graphValues.Length)
+            {
+                _graphValues = new float[ExpressionGraph.OutputFloats.Length];
+            }
+
+            Vector2 scale = new Vector2(Width / _graphValues.Length, -10f);
+            Vector2 offset = new Vector2(0, Height / 2f);
+
+            // Horizontal line
+            Render2D.DrawLine(new Vector2(0, offset.Y), new Vector2(Width, offset.Y), Color.Red);
+
+            // Vertical line
+            //Render2D.DrawLine(new Vector2(offset.X, 0), new Vector2(offset.X, Height), Color.Red);
+
+            for (int i = 0; i < _graphValues.Length - 1; i++)
+            {
+                _graphValues[i] = Mathf.Lerp(_graphValues[i], ExpressionGraph.OutputFloats[i], 0.7f);
+
+                Vector2 from = new Vector2(i, _graphValues[i]) * scale + offset;
+                Vector2 to = new Vector2(i + 1, _graphValues[i + 1]) * scale + offset;
+                Render2D.DrawLine(from, to, Color.White);
+            }
 
         }
 

@@ -73,6 +73,8 @@ namespace VisjectPlugin.Source
             AddAction(1, 1, 0, (_) => { });
             // Random float
             AddAction(1, 2, 0, (node) => { node.Return<float>(0, _rng.NextFloat()); });
+            // Get X
+            AddAction(1, 3, 0, (node) => { node.Return<float>(0, node.Context.X); });
 
             // Add
             AddAction(3, 1, 0, (node) => { node.Return<float>(0, node.InputAs<float>(0) + node.InputAs<float>(1)); });
@@ -140,29 +142,34 @@ namespace VisjectPlugin.Source
         }
 
         [NoSerialize]
-        public float OutputFloat { get; private set; }
+        public float[] OutputFloats { get; private set; } = new float[100];
 
         public void Update(float deltaTime)
         {
             if (Nodes == null || Nodes.Length <= 0) return;
 
-            // Update the parameters
-            // Each parameter will write its Value to the context
-            for (int i = 0; i < Parameters.Length; i++)
+            for (int j = 0; j < 100; j++)
             {
-                Parameters[i].Execute(_context);
-            }
-            // Update the nodes
-            // Each node will get its inputs from the context
-            //    Then, each node will execute its associated action
-            //    Lastly, it will write the outputs to the context
-            for (int i = 0; i < Nodes.Length; i++)
-            {
-                Nodes[i].Execute(_context);
-            }
+                // Set the X-coordinate
+                _context.X = j;
+                // Update the parameters
+                // Each parameter will write its Value to the context
+                for (int i = 0; i < Parameters.Length; i++)
+                {
+                    Parameters[i].Execute(_context);
+                }
+                // Update the nodes
+                // Each node will get its inputs from the context
+                //    Then, each node will execute its associated action
+                //    Lastly, it will write the outputs to the context
+                for (int i = 0; i < Nodes.Length; i++)
+                {
+                    Nodes[i].Execute(_context);
+                }
 
-            // Final outputs
-            OutputFloat = _outputNode.InputAs<float>(0);
+                // Final outputs
+                OutputFloats[j] = _outputNode.InputAs<float>(0);
+            }
         }
 
 

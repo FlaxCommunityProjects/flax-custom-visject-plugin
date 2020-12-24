@@ -84,7 +84,7 @@ namespace VisjectPlugin.Source.Editor
         : base(editor, item)
         {
             // Asset preview
-            _preview = new ExpressionGraphPreview(true)
+            _preview = new ExpressionGraphPreview(false)
             {
                 Parent = _split2.Panel1
             };

@@ -18,7 +18,8 @@ namespace VisjectPlugin.Source.VisjectGraphs
 
         public ExecuteActionCallback ExecuteAction;
 
-        // This could include other variables such as "xy-coordinates"
+        // X - coordinate
+        public float X;
 
         public GraphContext(int variablesLength, ExecuteActionCallback executeAction)
         {

@@ -55,6 +55,19 @@ namespace VisjectPlugin.Source.Editor
                 {
                     NodeElementArchetype.Factory.Output(0, "Float", typeof(float), 0),
                 }
+            },
+            // X-coordinate
+            new NodeArchetype
+            {
+                TypeID = 3,
+                Title = "Get X",
+                Description = "Get the x coordinate",
+                Flags = NodeFlags.AllGraphs,
+                Size = new Vector2(150, 30),
+                Elements = new[]
+                {
+                    NodeElementArchetype.Factory.Output(0, "Float", typeof(float), 0),
+                }
             }
         };
 
