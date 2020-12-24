@@ -1,0 +1,27 @@
+{
+	"Name": "Flax Custom Visject Plugin",
+	"Version": "1.0",
+	"Company": "",
+	"Copyright": "",
+	"GameTarget": "VisjectPluginTarget",
+	"EditorTarget": "VisjectPluginEditorTarget",
+	"References": [
+		{
+			"Name": "$(EnginePath)/Flax.flaxproj"
+		}
+	],
+	"DefaultScene": "74a68a984824b4510d12589f199ad68f",
+	"DefaultSceneSpawn": {
+		"Position": {
+			"X": -390.0,
+			"Y": 268.0,
+			"Z": -260.0
+		},
+		"Direction": {
+			"X": 0.8372721076011658,
+			"Y": -0.3420201241970062,
+			"Z": 0.42661166191101076
+		}
+	},
+	"MinEngineVersion": "0.0.6165"
+}

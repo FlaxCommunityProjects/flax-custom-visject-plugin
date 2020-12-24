@@ -1,12 +1,19 @@
-#Ignore Flax Engine files
+# Ignore Flax project files
+Binaries/
 Cache/
 Logs/
 Output/
+Screenshots/
+*.HotReload.*
 
-#Ignore thumbnails created by Windows
+# Ignore Visual Studio project files (generated locally)
+*.csproj
+*.sln
+
+# Ignore thumbnails created by Windows
 Thumbs.db
 
-#Ignore files built by Visual Studio
+# Ignore files built by Visual Studio
 *.obj
 *.exe
 *.pdb
@@ -24,15 +31,15 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
-[Bb]in/
-/[Dd]ebug*/
+[Bb]in
+[Dd]ebug*/
 *.lib
 *.sbr
 obj/
-/[Rr]elease*/
+[Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*
 .vs/
 
-#Nuget packages folder
+# Ignore Nuget packages folder
 packages/

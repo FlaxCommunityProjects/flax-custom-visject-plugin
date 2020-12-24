@@ -1,21 +1,15 @@
 {
-	"ID": "b3f9bf944d525962dbf423bcaf81f3f6",
+	"ID": "2a02d2354aa4aff3e9e3b59635f27cdb",
 	"TypeName": "VisjectPlugin.Source.ExpressionGraph",
-	"EngineBuild": 6181,
+	"EngineBuild": 6214,
 	"Data": {
-		"VisjectSurface": "VkcJdeYXAAAAAAAAAAAAAAgAAAACAAAAAQAAAAEAAQACAAAAAgABAAMAAAABAAYABAAAAAMAAwAIAAAAAQADAAcAAAABAAYABgAAAAEAAwAFAAAAAQAGAAL2Al0QmTwCRZz8X85VbQOnAQAAACMAAQABAQAAAAACAABAQAAAAAAC2H/XZLXBfEuFwyaxpOWSPgEAAAAgAAEAAQEAAAAAAgAAAD8AAAAAAAAAAAEAAAgAAAABAAgAAAACAQAAAAsAAAAAAAAAAAAAAAwAAADO2f9DJe/rQQAAAAAAAAAAAQAACAAAAAEABAAAAAABAAAACwAAAAAAAAAAAAAADAAAACALfcN307vCAAAAAAEAAAAH2H/XZLXBfEuFwyaxpOWSPgEAAAgAAAABAAQAAAABAQAAAAsAAAAAAAAAAAAAAAwAAAAYGpPDRhYSQgAAAAACAAAAAgAAgD8CAACAPwMAAP4vAAABAAIAAAAAAf4vAAABAAMAAAAAAv4vAAABAAYAAAAAAQAAAAsAAAAAAAAAAAAAAAwAAAALIhTCPzqhwQAAAAACAAAAAgAAAAACAAAAAAMAAP4vAAABAAYAAAACAf4vAAABAAcAAAAAAv4vAAABAAEAAAAAAQAAAAsAAAAAAAAAAAAAAAwAAAA1oIpDM9AhQwAAAAABAAAAB/YCXRCZPAJFnPxfzlVtA6cBAAAIAAAAAQAIAAAAAQEAAAALAAAAAAAAAAAAAAAMAAAAGVSBQqhieEMAAAAAAgAAAAIAAAAAAgAAAAADAAD+LwAAAQAEAAAAAgH+LwAAAQAFAAAAAAL+LwAAAQAIAAAAAAEAAAALAAAAAAAAAAAAAAAMAAAAufTZQs17kkIAAAAAAQAAAAf2Al0QmTwCRZz8X85VbQOnAQAACAAAAAEABgAAAAEBAAAACwAAAAAAAAAAAAAADAAAAGWh2MIghRBDAAAAAAEAAAAKAAAAAAAAAAAAAAAMAAAA8V1CwmhXzUKamVk/CQ==",
+		"VisjectSurface": "VkcJdVgbAAAEAAAAAQAAAAEAAAABAAEAAgAAAAIAAQADAAAAAwADAAQAAAABAAYABwAAAAAFR3oe0hwORbSekxgE44MpAQAAACAAAQcAAAAAAAAAQAAAAAAAAAAAAQAABwAAAAABAAMAAAACAQAAAAsAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAQAABwAAAAABAAMAAAAAAQAAAAsAAAAAAAAAAAAAAAwAAAA1vrnDSe9DwgAAAAACAAAABwAAAAAAAIA/BwAAAAAAAIA/AwAAAAAAAAABAAIAAAAAAQAAAAAAAQAEAAAAAAIAAAAAAAEAAQAAAAABAAAACwAAAAAAAAAAAAAADAAAALTiBcM0O9dBAAAAAAEAAAAUAAAAAAVHeh7SHA5FtJ6TGATjgykBAAAHAAAAAAEAAwAAAAEBAAAACwAAAAAAAAAAAAAADAAAACbWqsN4pblCAAAAAAEAAAAKAAAAAAAAAAAAAAAMAAAA4eMaw762NkN2sWI/CQ==",
 		"Parameters": [
 			{
-				"Name": "B",
-				"Index": 0,
-				"Value": 3.0,
-				"OutputIndex": 0
-			},
-			{
 				"Name": "A",
-				"Index": 1,
-				"Value": 0.5,
-				"OutputIndex": 1
+				"Index": 0,
+				"Value": 2.0,
+				"OutputIndex": 0
 			}
 		],
 		"Nodes": [
@@ -31,37 +25,7 @@
 					0
 				],
 				"OutputIndices": [
-					2
-				]
-			},
-			{
-				"GroupId": 6,
-				"TypeId": 1,
-				"MethodId": 0,
-				"Values": [],
-				"InputValues": [
-					null
-				],
-				"InputIndices": [
-					0
-				],
-				"OutputIndices": [
-					3
-				]
-			},
-			{
-				"GroupId": 6,
-				"TypeId": 1,
-				"MethodId": 0,
-				"Values": [],
-				"InputValues": [
-					null
-				],
-				"InputIndices": [
 					1
-				],
-				"OutputIndices": [
-					4
 				]
 			},
 			{
@@ -72,7 +36,7 @@
 				"InputValues": [],
 				"InputIndices": [],
 				"OutputIndices": [
-					5
+					2
 				]
 			},
 			{
@@ -88,55 +52,15 @@
 					1.0
 				],
 				"InputIndices": [
-					5,
-					4
+					2,
+					1
 				],
 				"OutputIndices": [
-					4
+					1
 				]
 			},
 			{
-				"GroupId": 3,
-				"TypeId": 1,
-				"MethodId": 0,
-				"Values": [
-					0.0,
-					0.0
-				],
-				"InputValues": [
-					0.0,
-					0.0
-				],
-				"InputIndices": [
-					4,
-					3
-				],
-				"OutputIndices": [
-					3
-				]
-			},
-			{
-				"GroupId": 3,
-				"TypeId": 1,
-				"MethodId": 0,
-				"Values": [
-					0.0,
-					0.0
-				],
-				"InputValues": [
-					0.0,
-					0.0
-				],
-				"InputIndices": [
-					3,
-					2
-				],
-				"OutputIndices": [
-					2
-				]
-			},
-			{
-				"$type": "VisjectPlugin.Source.VisjectGraphs.MainNode, Assembly",
+				"$type": "VisjectPlugin.Source.VisjectGraphs.MainNode, VisjectPlugin.CSharp",
 				"GroupId": 1,
 				"TypeId": 1,
 				"MethodId": 0,
@@ -145,7 +69,7 @@
 					null
 				],
 				"InputIndices": [
-					2
+					1
 				],
 				"OutputIndices": []
 			}
